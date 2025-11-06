@@ -1,6 +1,4 @@
-<!doctype html>
-
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8"> 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -34,92 +32,15 @@
             <div class="input-group">
                 <label for="password">Password</label>
                 <input type="password" id="password" name="password" required>
-
-</head>
-
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Static GitHub Site - Tema Hijau</title>
-  <meta name="description" content="Web statis GitHub dengan tema hijau terang dan tampilan responsif" />
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
-  <header>
-    <div class="container nav">
-      <div class="brand">MyGreenSite</div>
-      <nav class="menu" role="navigation" aria-label="Main menu">
-        <button data-page="home" class="active">Home</button>
-        <button data-page="about">About</button>
-        <button data-page="services">Services</button>
-        <button data-page="contact">Contact</button>
-      </nav>
-      <div class="actions">
-        <button id="logoutBtn" class="btn btn-ghost">Logout</button>
-      </div>
+            </div>
+            <button type="submit">Login</button>
+        </form>
     </div>
-  </header>  <main class="container">
-    <section class="card" id="content">
-      <h1 class="title">Selamat datang di MyGreenSite</h1>
-      <p class="muted">Ini contoh web statis dengan latar hijau terang dan font tebal. Klik menu di atas untuk melihat halaman lain. Setelah Anda mengklik salah satu menu, tombol <strong>Logout</strong> akan muncul.</p>
-    </section>
-  </main>  <footer>
-    Dibuat dengan ❤ menggunakan HTML • CSS • JavaScript — Siap untuk GitHub Pages
-  </footer>  <script>
-    (function(){
-      const menuButtons = document.querySelectorAll('[data-page]');
-      const content = document.getElementById('content');
-      const logoutBtn = document.getElementById('logoutBtn');
-      let hasInteracted = false;
-
-      const pages = {
-        home: `<h1 class="title">Home</h1><p class="muted">Halo! Ini halaman utama dari MyGreenSite.</p>`,
-        about: `<h1 class="title">About</h1><p class="muted">MyGreenSite adalah contoh web statis yang ramah layar dan mudah di-deploy ke GitHub Pages.</p>`,
-        services: `<h1 class="title">Services</h1><p class="muted">Kami menyediakan pembuatan website statis, desain responsif, dan panduan GitHub Pages.</p>`,
-        contact: `<h1 class="title">Contact</h1><p class="muted">Hubungi kami di <a href='mailto:hello@example.com'>hello@example.com</a></p>`
-      };
-
-      function setActive(page){
-        menuButtons.forEach(b=>b.classList.toggle('active', b.dataset.page===page));
-        content.innerHTML = pages[page] || pages.home;
-      }
-
-      function showLogout(){
-        if (hasInteracted) return;
-        hasInteracted = true;
-        localStorage.setItem('site_interacted', '1');
-        logoutBtn.style.display = 'inline-block';
-      }
-
-      if (localStorage.getItem('site_interacted')==='1' && localStorage.getItem('site_logged_out')!=='1'){
-        logoutBtn.style.display = 'inline-block';
-      }
-
-      menuButtons.forEach(btn=>{
-        btn.addEventListener('click', ()=>{
-          if (localStorage.getItem('site_logged_out')==='1'){
-            alert('Anda sudah logout. Reload halaman untuk memulai ulang.');
-            return;
-          }
-          setActive(btn.dataset.page);
-          showLogout();
-        });
-      });
-
-      logoutBtn.addEventListener('click', ()=>{
-        const ok = confirm('Apakah Anda yakin ingin logout?');
-        if (!ok) return;
-        localStorage.setItem('site_logged_out','1');
-        logoutBtn.style.display = 'none';
-        menuButtons.forEach(b=>{
-          b.disabled = true;
-          b.style.opacity = '0.5';
-          b.style.cursor = 'not-allowed';
-        });
-        content.innerHTML = `<h1 class='title'>Anda telah logout</h1><p class='muted'>Terima kasih! Reload halaman untuk masuk kembali.</p>`;
-      });
-
-      setActive('home');
-    })();
-  </script></body>
+</body>
 </html>
+    
+        
+
+
+
+
