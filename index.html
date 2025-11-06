@@ -1,0 +1,139 @@
+<!doctype html>
+
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Static GitHub Site - Demo</title>
+  <meta name="description" content="Contoh web statis untuk GitHub Pages: menu, konten, dan tombol logout" />
+  <style>
+    :root{--accent:#2563eb;--bg:#f7f9fc;--card:#ffffff}
+    *{box-sizing:border-box}
+    body{font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial; margin:0; background:var(--bg); color:#0f172a}
+    header{background:linear-gradient(90deg,rgba(37,99,235,0.06),transparent); padding:18px}
+    .container{max-width:980px;margin:24px auto;padding:0 16px}
+    .nav{display:flex;gap:8px;align-items:center}
+    .brand{font-weight:700;margin-right:12px}
+    .menu{display:flex;gap:6px}
+    .menu button{background:transparent;border:0;padding:10px 14px;border-radius:12px;cursor:pointer;font-weight:600}
+    .menu button:hover{background:rgba(2,6,23,0.04)}
+    .menu button.active{background:var(--accent);color:white}
+    .actions{margin-left:auto;display:flex;gap:8px;align-items:center}
+    .btn{padding:8px 12px;border-radius:10px;border:0;cursor:pointer;font-weight:600}
+    .btn-primary{background:var(--accent);color:white}
+    .btn-ghost{background:transparent;border:1px solid rgba(2,6,23,0.06)}.card{background:var(--card);border-radius:14px;padding:22px;margin-top:18px;box-shadow:0 6px 18px rgba(15,23,42,0.06)}
+.title{font-size:20px;margin:0 0 10px}
+.muted{color:#475569}
+
+/* Logout float */
+#logoutBtn{display:none}
+
+footer{max-width:980px;margin:30px auto;padding:10px 16px;color:#475569}
+
+/* small screens */
+@media (max-width:640px){.nav{flex-wrap:wrap}.actions{width:100%;margin-top:8px}}
+
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <div class="brand">MyStaticSite</div>
+      <nav class="menu" role="navigation" aria-label="Main menu">
+        <button data-page="home" class="active">Home</button>
+        <button data-page="about">About</button>
+        <button data-page="services">Services</button>
+        <button data-page="contact">Contact</button>
+      </nav>
+      <div class="actions">
+        <!-- Logout is hidden until user clicks any menu (see JS) -->
+        <button id="logoutBtn" class="btn btn-ghost">Logout</button>
+      </div>
+    </div>
+  </header>  <main class="container">
+    <section class="card" id="content">
+      <h1 class="title">Selamat datang di MyStaticSite</h1>
+      <p class="muted">Ini contoh situs statis yang bisa diletakkan di GitHub Pages. Klik menu di atas untuk berpindah halaman. Setelah Anda mengklik salah satu menu, tombol <strong>Logout</strong> akan muncul di kanan atas.</p>
+    </section>
+  </main>  <footer>
+    Buat di: HTML • CSS • JavaScript — Siap dipublikasikan ke GitHub Pages (lihat instruksi di bagian komentar file)
+  </footer>  <script>
+    // Simple single-file SPA navigation + logout behavior
+    (function(){
+      const menuButtons = document.querySelectorAll('[data-page]')
+      const content = document.getElementById('content')
+      const logoutBtn = document.getElementById('logoutBtn')
+      let hasInteracted = false
+
+      const pages = {
+        home: `\n          <h1 class="title">Home</h1>\n          <p class="muted">Halo! Ini halaman utama. Contoh teks singkat untuk memperlihatkan konten.</p>\n        `,
+        about: `\n          <h1 class="title">About</h1>\n          <p class="muted">Kami membuat demo situs statis yang mudah di-deploy ke GitHub Pages.</p>\n        `,
+        services: `\n          <h1 class="title">Services</h1>\n          <p class="muted">Layanan kami: pembuatan website statis, optimasi performa, dan konsultasi deployment.</p>\n        `,
+        contact: `\n          <h1 class="title">Contact</h1>\n          <p class="muted">Email: <a href=\"mailto:hello@example.com\">hello@example.com</a><br/>Alamat: Contoh Street 123</p>\n        `
+      }
+
+      function setActive(page){
+        menuButtons.forEach(b=>b.classList.toggle('active', b.dataset.page===page))
+        content.innerHTML = pages[page] || pages.home
+      }
+
+      // Show logout button after first *menu click*
+      function showLogout(){
+        if (hasInteracted) return
+        hasInteracted = true
+        // remember in localStorage so page refresh still shows it if "loggedIn"
+        localStorage.setItem('site_interacted', '1')
+        logoutBtn.style.display = 'inline-block'
+      }
+
+      // Load remembered state
+      if (localStorage.getItem('site_interacted')==='1' && localStorage.getItem('site_logged_out')!=='1'){
+        logoutBtn.style.display = 'inline-block'
+      }
+
+      // Attach listeners
+      menuButtons.forEach(btn=>{
+        btn.addEventListener('click', ()=>{
+          // If user logged out, disallow navigation
+          if (localStorage.getItem('site_logged_out')==='1'){
+            alert('Anda sudah logout. Reload halaman untuk memulai ulang.')
+            return
+          }
+          setActive(btn.dataset.page)
+          showLogout()
+        })
+      })
+
+      // Logout behavior
+      logoutBtn.addEventListener('click', ()=>{
+        const ok = confirm('Apakah Anda yakin ingin logout?')
+        if (!ok) return
+        // simulate logout: set flag and update UI
+        localStorage.setItem('site_logged_out','1')
+        logoutBtn.style.display = 'none'
+        // disable menus
+        menuButtons.forEach(b=>{
+          b.disabled = true
+          b.style.opacity = '0.5'
+          b.style.cursor = 'not-allowed'
+        })
+        // show logged out message
+        content.innerHTML = `\n          <h1 class="title">Anda telah logout</h1>\n          <p class="muted">Terima kasih telah mencoba demo ini. Untuk memulai ulang, muat ulang halaman (Ctrl/Cmd + R) atau hapus data situs di localStorage.</p>\n        `
+      })
+
+      // Initialize
+      setActive('home')
+    })()
+  </script>  <!--
+    Petunjuk deploy ke GitHub Pages:
+    1. Buat repository baru di GitHub (mis. my-static-site).
+    2. Tambahkan file ini sebagai index.html di root repository.
+    3. Commit & push.
+    4. Di settings repo -> Pages -> pilih branch main (atau gh-pages) dan folder / (root), lalu Save.
+    5. GitHub akan memberi URL seperti: https://<username>.github.io/<repo-name>/ .
+
+    Catatan keamanan & kustomisasi:
+    - Ini hanya demo statis (tidak ada autentikasi server). Tombol "Logout" hanya simulasi yang menyimpan flag di localStorage.
+    - Untuk menambah halaman, cukup tambahkan entry ke objek `pages` dan tombol menu dengan data-page yang sesuai.
+  --></body>
+</html>
